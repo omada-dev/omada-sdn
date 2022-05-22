@@ -8,6 +8,7 @@
 export OMADAHELPERSCRIPTURL="https://raw.githubusercontent.com/omada-dev/omada-sdn/main/bin/omada"
 export HELPERINSTALLDIR=${HOME}/bin
 export OMADADEBSOURCESDIR="${HOME}/Omada_SDN_Controller/deb"
+export NEWSWAPSIZE=2048
 
 # Omada SDN Controller version variables
 # Download latest: https://www.tp-link.com/de/support/download/omada-software-controller/v5/
@@ -109,7 +110,7 @@ configureRaspiSSH () {
 }
 
 configureRaspiSwap () {
-    sudo sed -i 's/CONF_SWAPSIZE\=100/CONF_SWAPSIZE\=2048/' /etc/dphys-swapfile && \
+    sudo sed -i "s/CONF_SWAPSIZE\=100/CONF_SWAPSIZE\=${NEWSWAPSIZE}/" /etc/dphys-swapfile && \
     #sudo sed -i 's/#CONF_SWAPFILE=\/var\/swap/CONF_SWAPFILE=/swap2G' /etc/dphys-swapfile && \
     sudo /etc/init.d/dphys-swapfile restart
 }
