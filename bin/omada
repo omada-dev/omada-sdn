@@ -167,7 +167,7 @@ firstBootUbuntu () {
     sudo apt dist-upgrade -y && \
     InstallPreRequirements && \
     InstallJavaFromApt && \
-    sudo apt install -y mongodb-org; && \
+    sudo apt install -y mongodb-org && \
     InstallOmadaSDN && \
     OptionalInstall && \
     configureUfw && \
