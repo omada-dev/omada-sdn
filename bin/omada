@@ -86,7 +86,7 @@ configureUfw () {
 configureUfwPreV5 () {
     # starting from controller version 5, tcp ports 29811-29813 are not used anymore    
     # open ports required for omada
-    configureUfwOmadaV5 && \
+    configureUfw && \
     sudo ufw allow 29811/tcp && \
     sudo ufw allow 29812/tcp && \
     sudo ufw allow 29813/tcp;
