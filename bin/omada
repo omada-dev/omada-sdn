@@ -109,8 +109,8 @@ configureRaspiSSH () {
 }
 
 configureRaspiSwap () {
-    sudo sed -i 's/CONF_SWAPSIZE\=100/CONF_SWAPSIZE\=2048/' /etc/dphys-swapfile
-    #sudo sed -i 's/#CONF_SWAPFILE=\/var\/swap/CONF_SWAPFILE=/swap2G' /etc/dphys-swapfile
+    sudo sed -i 's/CONF_SWAPSIZE\=100/CONF_SWAPSIZE\=2048/' /etc/dphys-swapfile && \
+    #sudo sed -i 's/#CONF_SWAPFILE=\/var\/swap/CONF_SWAPFILE=/swap2G' /etc/dphys-swapfile && \
     sudo /etc/init.d/dphys-swapfile restart
 }
 
@@ -137,7 +137,7 @@ configLocales () {
 }
 
 fullInstallOmadaSDN () {
-    InstallJavaFromSid && installMongoDB4arm64 && InstallOmadaSDN && OptionalInstall && configureUfw;
+    InstallJavaFromSid && installMongoDB4arm64 && InstallOmadaSDN && OptionalInstall && configureUfw && enableOmadaHelper;
 }
 
 firstBoot () {
