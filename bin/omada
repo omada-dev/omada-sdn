@@ -1,0 +1,160 @@
+#!/bin/bash
+
+# Copyright (c) 2022 Omada Community Developers
+# Distributed under the MIT software license, see the accompanying
+# file COPYING or http://www.opensource.org/licenses/mit-license.php.
+
+# Script variables
+export OMADAHELPERSCRIPTURL="https://raw.githubusercontent.com/omada-dev/omada-sdn/main/bin/omada"
+export HELPERINSTALLDIR=${HOME}/bin
+export OMADADEBSOURCESDIR="${HOME}/Omada_SDN_Controller/deb"
+
+# Omada SDN Controller version variables
+# Download latest: https://www.tp-link.com/de/support/download/omada-software-controller/v5/
+# Latest version during script creation: https://static.tp-link.com/upload/software/2022/202201/20220120/Omada_SDN_Controller_v5.3.1_Linux_x64.deb
+# Latest official stable version during creation: https://static.tp-link.com/upload/software/2022/202203/20220322/Omada_SDN_Controller_v5.1.7_Linux_x64.deb
+export OmadaSdnUrl="https://static.tp-link.com/upload/software/2022/202201/20220120/Omada_SDN_Controller_v5.3.1_Linux_x64.deb"
+
+# locales variables
+# default is: en_GB.UTF-8
+export lang=en
+export country=GB
+export encoding=UTF-8
+
+init () {
+    echo "create Omada debian packages sources folder where all deb packages will be saved"
+    mkdir -p "${OMADADEBSOURCESDIR}";
+}
+
+installMongoDB5arm64 () {
+    mkdir -p ${OMADADEBSOURCESDIR}/mongodb5 && \
+    wget -P ${OMADADEBSOURCESDIR}/mongodb5 https://repo.mongodb.org/apt/ubuntu/dists/focal/mongodb-org/5.0/multiverse/binary-arm64/mongodb-org_5.0.8_arm64.deb && \
+    wget -P ${OMADADEBSOURCESDIR}/mongodb5 https://repo.mongodb.org/apt/ubuntu/dists/focal/mongodb-org/5.0/multiverse/binary-arm64/mongodb-org-database_5.0.8_arm64.deb && \
+    wget -P ${OMADADEBSOURCESDIR}/mongodb5 https://repo.mongodb.org/apt/ubuntu/dists/focal/mongodb-org/5.0/multiverse/binary-arm64/mongodb-org-server_5.0.8_arm64.deb && \
+    wget -P ${OMADADEBSOURCESDIR}/mongodb5 https://repo.mongodb.org/apt/ubuntu/dists/focal/mongodb-org/5.0/multiverse/binary-arm64/mongodb-org-mongos_5.0.8_arm64.deb && \
+    wget -P ${OMADADEBSOURCESDIR}/mongodb5 https://repo.mongodb.org/apt/ubuntu/dists/focal/mongodb-org/5.0/multiverse/binary-arm64/mongodb-org-shell_5.0.8_arm64.deb && \
+    wget -P ${OMADADEBSOURCESDIR}/mongodb5 https://repo.mongodb.org/apt/ubuntu/dists/focal/mongodb-org/5.0/multiverse/binary-arm64/mongodb-org-tools_5.0.8_arm64.deb && \
+    wget -P ${OMADADEBSOURCESDIR}/mongodb5 https://repo.mongodb.org/apt/ubuntu/dists/focal/mongodb-org/5.0/multiverse/binary-arm64/mongodb-org-database-tools-extra_5.0.8_arm64.deb && \
+    wget -P ${OMADADEBSOURCESDIR}/mongodb5 https://repo.mongodb.org/apt/ubuntu/dists/focal/mongodb-org/5.0/multiverse/binary-arm64/mongodb-database-tools_5.0.8_arm64.deb && \
+    wget -P ${OMADADEBSOURCESDIR}/mongodb5 https://repo.mongodb.org/apt/ubuntu/dists/focal/mongodb-org/5.0/multiverse/binary-arm64/mongodb-database-tools_100.5.2_arm64.deb && \
+    sudo apt install -y ${OMADADEBSOURCESDIR}/mongodb5/*.deb;
+}
+
+installMongoDB4arm64 () {
+    mkdir -p ${OMADADEBSOURCESDIR}/mongodb4 && \
+    wget -P ${OMADADEBSOURCESDIR}/mongodb4 https://repo.mongodb.org/apt/ubuntu/dists/focal/mongodb-org/4.4/multiverse/binary-arm64/mongodb-org_4.4.14_arm64.deb && \
+    wget -P ${OMADADEBSOURCESDIR}/mongodb4 https://repo.mongodb.org/apt/ubuntu/dists/focal/mongodb-org/4.4/multiverse/binary-arm64/mongodb-org-server_4.4.14_arm64.deb && \
+    wget -P ${OMADADEBSOURCESDIR}/mongodb4 https://repo.mongodb.org/apt/ubuntu/dists/focal/mongodb-org/4.4/multiverse/binary-arm64/mongodb-org-mongos_4.4.14_arm64.deb && \
+    wget -P ${OMADADEBSOURCESDIR}/mongodb4 https://repo.mongodb.org/apt/ubuntu/dists/focal/mongodb-org/4.4/multiverse/binary-arm64/mongodb-org-shell_4.4.14_arm64.deb && \
+    wget -P ${OMADADEBSOURCESDIR}/mongodb4 https://repo.mongodb.org/apt/ubuntu/dists/focal/mongodb-org/4.4/multiverse/binary-arm64/mongodb-org-tools_4.4.14_arm64.deb && \
+    wget -P ${OMADADEBSOURCESDIR}/mongodb4 https://repo.mongodb.org/apt/ubuntu/dists/focal/mongodb-org/4.4/multiverse/binary-arm64/mongodb-org-database-tools-extra_4.4.14_arm64.deb && \
+    wget -P ${OMADADEBSOURCESDIR}/mongodb4 https://repo.mongodb.org/apt/ubuntu/dists/focal/mongodb-org/4.4/multiverse/binary-arm64/mongodb-database-tools_100.4.1_arm64.deb && \
+    sudo apt install -y ${OMADADEBSOURCESDIR}/mongodb4/*.deb;
+}
+
+InstallJavaFromSid () {
+    sudo apt install -y openjdk-8-jre-headless openjdk-8-jdk-headless jsvc;
+    cat <<"EOF_set_java_home" | tee -a ~/.profile
+
+# set JAVA_HOME path for JRE 8 which omada SDN requires 
+if [ -d "/usr/lib/jvm/java-8-openjdk-amd64" ] ; then
+    export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+fi
+EOF_set_java_home
+}
+
+InstallPreRequirements () {
+    sudo apt install -y curl net-tools
+}
+
+InstallOmadaSDN () {
+    mkdir -p ${OMADADEBSOURCESDIR}/Omada_SDN_Controller
+    wget -P ${OMADADEBSOURCESDIR}/Omada_SDN_Controller ${OmadaSdnUrl} && \
+    sudo apt install -y ${OMADADEBSOURCESDIR}/Omada_SDN_Controller/*.deb
+}
+
+configureUfw () {
+    sudo ufw allow 22/tcp && \  # open default ssh port
+    sudo ufw allow 22/udp && \  # open wireguard port
+    sudo ufw allow 8088/tcp && \    # open omada http port
+    sudo ufw allow 8043/tcp && \    # open omada https port
+    # open ports required for omada
+    sudo ufw allow 29810/udp && \
+    sudo ufw allow 29814/tcp;
+}
+
+configureUfwPreV5 () {
+    # starting from controller version 5, tcp ports 29811-29813 are not used anymore    
+    # open ports required for omada
+    configureUfwOmadaV5 && \
+    sudo ufw allow 29811/tcp && \
+    sudo ufw allow 29812/tcp && \
+    sudo ufw allow 29813/tcp;
+}
+
+OptionalInstall () {
+    sudo apt install -y ufw wireguard-tools
+    configureUfw
+    sudo mkdir -p /etc/wireguard && \ # create defualt wireguard dir
+}
+
+configureRaspiSSH () {
+    # one of many guides how to enable SSH: https://linuxize.com/post/how-to-enable-ssh-on-raspberry-pi/
+    #                                       https://web.archive.org/web/20220522022619/https://linuxize.com/post/how-to-enable-ssh-on-raspberry-pi/
+    sudo systemctl enable ssh
+    sudo systemctl start ssh
+}
+
+configureRaspiSwap () {
+    sudo sed -i 's/CONF_SWAPSIZE\=100/CONF_SWAPSIZE\=2048/' /etc/dphys-swapfile
+    #sudo sed -i 's/#CONF_SWAPFILE=\/var\/swap/CONF_SWAPFILE=/swap2G' /etc/dphys-swapfile
+    sudo /etc/init.d/dphys-swapfile restart
+}
+
+configureApt () {
+    echo "deb http://deb.debian.org/debian sid main contrib non-free" | sudo tee /etc/apt/sources.list.d/sid.list && \
+    sudo apt update
+}
+
+enableOmadaHelper () {
+    cat <<"EOF_load_omada_helper_vars" | tee -a ~/.profile
+
+# load omada helper functions
+if [ -f "${HOME}/bin/omada" ] ; then
+    . ${HOME}/bin/omada
+fi
+EOF_load_omada_helper_vars
+}
+
+configLocales () {
+    # fix: locale: Cannot set LC_ALL to default locale: No such file or directory
+    export LC_ALL="${lang}_${country}.${encoding}" && \
+    sudo locale-gen "${lang}_${country}.${encoding}" && \
+    sudo dpkg-reconfigure locales
+}
+
+fullInstallOmadaSDN () {
+    InstallJavaFromSid && installMongoDB4arm64 && InstallOmadaSDN && OptionalInstall && configureUfw;
+}
+
+firstBoot () {
+    configureRaspiSwap && \
+    configureApt && \
+    configLocales && \
+    sudo apt upgrade -y && \
+    sudo apt autoremove -y && \
+    sudo apt autoclean -y && \
+    OptionalInstall && \
+    fullInstallOmadaSDN;
+}
+
+installOmadaHelper () {
+    mkdir -p ${HELPERINSTALLDIR} && \
+    if [ -f ${HELPERINSTALLDIR}/omada ]; then echo "Found installed Omada Helper Functions script ... moving it to omada.old overwritting any existing omada.old file" && mv -f ${HELPERINSTALLDIR}/omada ${HELPERINSTALLDIR}/omada.old; fi && \
+    wget -O ${HELPERINSTALLDIR}/omada ${OMADAHELPERSCRIPTURL} && \
+    chmod +x ${HELPERINSTALLDIR}/omada && \
+    . ${HELPERINSTALLDIR}/omada && \
+    echo "Omada helper functions installed";
+}
+
+echo "Info: Omada Helper Functions Loaded"
