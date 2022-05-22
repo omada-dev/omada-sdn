@@ -22,7 +22,7 @@ export country=GB
 export encoding=UTF-8
 
 init () {
-    echo "create Omada debian packages sources folder where all deb packages will be saved"
+    echo "create Omada debian packages sources folder where all deb packages will be saved" && \
     mkdir -p "${OMADADEBSOURCESDIR}";
 }
 
@@ -53,7 +53,7 @@ installMongoDB4arm64 () {
 }
 
 InstallJavaFromSid () {
-    sudo apt install -y openjdk-8-jre-headless openjdk-8-jdk-headless jsvc;
+    sudo apt install -y openjdk-8-jre-headless openjdk-8-jdk-headless jsvc && \
     cat <<"EOF_set_java_home" | tee -a ~/.profile
 
 # set JAVA_HOME path for JRE 8 which omada SDN requires 
@@ -68,7 +68,7 @@ InstallPreRequirements () {
 }
 
 InstallOmadaSDN () {
-    mkdir -p ${OMADADEBSOURCESDIR}/Omada_SDN_Controller
+    mkdir -p ${OMADADEBSOURCESDIR}/Omada_SDN_Controller && \
     wget -P ${OMADADEBSOURCESDIR}/Omada_SDN_Controller ${OmadaSdnUrl} && \
     sudo apt install -y ${OMADADEBSOURCESDIR}/Omada_SDN_Controller/*.deb
 }
@@ -104,8 +104,8 @@ OptionalInstall () {
 configureRaspiSSH () {
     # one of many guides how to enable SSH: https://linuxize.com/post/how-to-enable-ssh-on-raspberry-pi/
     #                                       https://web.archive.org/web/20220522022619/https://linuxize.com/post/how-to-enable-ssh-on-raspberry-pi/
-    sudo systemctl enable ssh
-    sudo systemctl start ssh
+    sudo systemctl enable ssh && \
+    sudo systemctl start ssh;
 }
 
 configureRaspiSwap () {
