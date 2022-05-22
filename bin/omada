@@ -13,7 +13,7 @@ export OMADADEBSOURCESDIR="${HOME}/Omada_SDN_Controller/deb"
 # Download latest: https://www.tp-link.com/de/support/download/omada-software-controller/v5/
 # Latest version during script creation: https://static.tp-link.com/upload/software/2022/202201/20220120/Omada_SDN_Controller_v5.3.1_Linux_x64.deb
 # Latest official stable version during creation: https://static.tp-link.com/upload/software/2022/202203/20220322/Omada_SDN_Controller_v5.1.7_Linux_x64.deb
-export OmadaSdnUrl="https://static.tp-link.com/upload/software/2022/202201/20220120/Omada_SDN_Controller_v5.3.1_Linux_x64.deb"
+export OmadaSdnUrl="https://static.tp-link.com/upload/software/2022/202203/20220322/Omada_SDN_Controller_v5.1.7_Linux_x64.deb"
 
 # locales variables
 # default is: en_GB.UTF-8
