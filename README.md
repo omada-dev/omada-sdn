@@ -11,11 +11,12 @@ Omada SDN related scripts and documentation
         - [configLocales](#configlocales)
         - [installMongoDB4arm64](#installmongodb4arm64)
         - [installMongoDB5arm64](#installmongodb5arm64)
-        - [InstallJavaFromApt](#InstallJavaFromApt)
+        - [InstallJavaFromApt](#installjavafromapt)
         - [configureUfw](#configureufw)
         - [OptionalInstall](#optionalinstall)
         - [enableOmadaHelper](#enableomadahelper)
         - [configureRaspiSSH](#configureraspissh)
+        - [firstBootUbuntu](#firstbootubuntu)
 
 ## Omada Helper Functions Script
 
@@ -124,3 +125,6 @@ EOF_load_omada_helper_vars
 
 Enables ssh server on Raspi OS
 
+##### firstBootUbuntu
+
+Installs omada sdn controller on Ubuntu 20.04
