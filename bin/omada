@@ -53,7 +53,7 @@ installMongoDB4arm64 () {
     sudo apt install -y ${OMADADEBSOURCESDIR}/mongodb4/*.deb;
 }
 
-InstallJavaFromSid () {
+InstallJavaFromApt () {
     sudo apt install -y openjdk-8-jre-headless openjdk-8-jdk-headless jsvc && \
     cat <<"EOF_set_java_home" | tee -a ~/.profile
 
@@ -137,8 +137,17 @@ configLocales () {
     sudo dpkg-reconfigure locales
 }
 
+installOmadaHelper () {
+    mkdir -p ${HELPERINSTALLDIR} && \
+    if [ -f ${HELPERINSTALLDIR}/omada ]; then echo "Found installed Omada Helper Functions script ... moving it to omada.old overwritting any existing omada.old file" && mv -f ${HELPERINSTALLDIR}/omada ${HELPERINSTALLDIR}/omada.old; fi && \
+    wget -O ${HELPERINSTALLDIR}/omada ${OMADAHELPERSCRIPTURL} && \
+    chmod +x ${HELPERINSTALLDIR}/omada && \
+    . ${HELPERINSTALLDIR}/omada && \
+    echo "Omada helper functions installed";
+}
+
 fullInstallOmadaSDN () {
-    InstallJavaFromSid && installMongoDB4arm64 && InstallOmadaSDN && OptionalInstall && configureUfw && enableOmadaHelper;
+    InstallJavaFromApt && installMongoDB4arm64 && InstallOmadaSDN && OptionalInstall && configureUfw && enableOmadaHelper;
 }
 
 firstBoot () {
@@ -152,13 +161,17 @@ firstBoot () {
     fullInstallOmadaSDN;
 }
 
-installOmadaHelper () {
-    mkdir -p ${HELPERINSTALLDIR} && \
-    if [ -f ${HELPERINSTALLDIR}/omada ]; then echo "Found installed Omada Helper Functions script ... moving it to omada.old overwritting any existing omada.old file" && mv -f ${HELPERINSTALLDIR}/omada ${HELPERINSTALLDIR}/omada.old; fi && \
-    wget -O ${HELPERINSTALLDIR}/omada ${OMADAHELPERSCRIPTURL} && \
-    chmod +x ${HELPERINSTALLDIR}/omada && \
-    . ${HELPERINSTALLDIR}/omada && \
-    echo "Omada helper functions installed";
+firstBootUbuntu () {
+    sudo apt update && \
+    sudo apt upgrade -y && \
+    sudo apt dist-upgrade -y && \
+    InstallPreRequirements && \
+    InstallJavaFromApt && \
+    sudo apt install -y mongodb-org; && \
+    InstallOmadaSDN && \
+    OptionalInstall && \
+    configureUfw && \
+    enableOmadaHelper;
 }
 
 echo "Info: Omada Helper Functions Loaded"

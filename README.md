@@ -11,7 +11,7 @@ Omada SDN related scripts and documentation
         - [configLocales](#configlocales)
         - [installMongoDB4arm64](#installmongodb4arm64)
         - [installMongoDB5arm64](#installmongodb5arm64)
-        - [InstallJavaFromSid](#installjavafromsid)
+        - [InstallJavaFromApt](#InstallJavaFromApt)
         - [configureUfw](#configureufw)
         - [OptionalInstall](#optionalinstall)
         - [enableOmadaHelper](#enableomadahelper)
@@ -77,7 +77,7 @@ Installs mongodb-org v4.4.14
 
 Installs mongodb-org v5.0.8. Currently not used as Omada SDN does not support mongodb-org >= v5.0.8
 
-##### InstallJavaFromSid
+##### InstallJavaFromApt
 
 Installs JRE/JDK and jsvc packages: 
 
