@@ -2,6 +2,8 @@
 Omada SDN related scripts and documentation
 
 - [omada-sdn](#omada-sdn)
+  - [Omada Scripts for cloud providers](#omada-scripts-for-cloud-providers)
+    - [Amazon (AWS)](#amazon-aws)
   - [Omada Helper Functions Script](#omada-helper-functions-script)
       - [How to install - Omada Helper Functions Script](#how-to-install---omada-helper-functions-script)
       - [Functions explained](#functions-explained)
@@ -13,10 +15,20 @@ Omada SDN related scripts and documentation
         - [installMongoDB5arm64](#installmongodb5arm64)
         - [InstallJavaFromApt](#installjavafromapt)
         - [configureUfw](#configureufw)
+          - [Opens wireguard and ssh ports](#opens-wireguard-and-ssh-ports)
         - [OptionalInstall](#optionalinstall)
         - [enableOmadaHelper](#enableomadahelper)
         - [configureRaspiSSH](#configureraspissh)
         - [firstBootUbuntu](#firstbootubuntu)
+        - [firstBootAwsAmazonLinux2](#firstbootawsamazonlinux2)
+
+## Omada Scripts for cloud providers
+
+Scripts which can be used together with different providers.
+
+### Amazon (AWS)
+
+[Script](bin/aws-userdata-amazon-linux-2.sh) example for use as user data script for Omada SDN Controller on AWS with Amazon Linux or simply to install Omada SDN controller for the first time. For more, read [User Guide for Linux Instances](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instancedata-add-user-data.html) and [Run commands on your Linux instance at launch](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html).
 
 ## Omada Helper Functions Script
 
@@ -72,7 +84,7 @@ Configures locales, default is set to GB UTF-8, you can change it by changing va
 
 ##### installMongoDB4arm64
 
-Installs mongodb-org v4.4.14
+Installs mongodb-org v4.4.14. Since [v5.0.29](https://community.tp-link.com/en/business/forum/topic/520248) MongoDB v4 is supported.
 
 ##### installMongoDB5arm64
 
@@ -82,16 +94,24 @@ Installs mongodb-org v5.0.8. Currently not used as Omada SDN does not support mo
 
 Installs JRE/JDK and jsvc packages: 
 
-    openjdk-8-jre-headless openjdk-8-jdk-headless jsvc
+```text
+openjdk-8-jre-headless openjdk-8-jdk-headless jsvc
+```
 
 ##### configureUfw
 
-Opens ports for:
+From version [v5.0.29](https://community.tp-link.com/en/business/forum/topic/520248):
+>>Default port for device adoption and management _has been changed to TCP port __29814___, please refer to [FAQ 3265](https://www.tp-link.com/support/faq/3265/) for more details. You can change the default ports (29810-29814) by editing the “omada.properties” file (default path: /opt/tplink/EAPController/properties) so that you can deploy multiple Controllers on the same PC or behind the same NAT router
 
- - omada: `29810/udp`, `29814/tcp`, `8088/tcp`, `8043/tcp`
- - ssh: `22/tcp`
- - wireguard: `22/udp`
-   _Wireguards default port is 51820, I use here 22 for the sake of simplicity for opening ssh and wireguard ports._
+- omada v5: `29810/udp`, `29814/tcp`, `8088/tcp`, `8043/tcp`
+- omada v4: `29810/udp`, `29811-29814/tcp`, `8088/tcp`, `8043/tcp`
+
+_Full overview of all ports used by omada can be found [here](https://www.tp-link.com/support/faq/3265/)._
+
+###### Opens wireguard and ssh ports
+
+- ssh: `22/tcp`
+- wireguard: `51820/udp`
 
 Before running this function, make sure ufw is installed, you can install ufw and wireguard with `OptionalInstall` or manually with `sudo apt install -y ufw`
 
@@ -128,3 +148,7 @@ Enables ssh server on Raspi OS
 ##### firstBootUbuntu
 
 Installs omada sdn controller on Ubuntu 20.04
+
+##### firstBootAwsAmazonLinux2
+
+Installs Omada SDN Controller on AWS with Amazon Linux 2 on first boot. It is based on userdata script for Amazon Linux 2. For more, read [User Guide for Linux Instances](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instancedata-add-user-data.html) and [Run commands on your Linux instance at launch](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html).
