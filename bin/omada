@@ -9,6 +9,7 @@ export OMADAHELPERSCRIPTURL="https://raw.githubusercontent.com/omada-dev/omada-s
 export HELPERINSTALLDIR=${HOME}/bin
 export OMADADEBSOURCESDIR="${HOME}/Omada_SDN_Controller/deb"
 export NEWSWAPSIZE=2048
+export OmadaSdnDestination="/opt/tplink/EAPController"
 
 # Omada SDN Controller version variables
 # Download latest: https://www.tp-link.com/de/support/download/omada-software-controller/v5/
@@ -174,5 +175,58 @@ firstBootUbuntu () {
     configureUfw && \
     enableOmadaHelper;
 }
+
+InstallOmadaSDNFromTarGz () {
+# Set vars
+    OMADATARGZ=$(echo "${OmadaSdnUrl}" | awk '{split($0,a,"/"); print a[9]}') && echo "Omada installer filename set: ${OMADATARGZ}"
+    MYINSTALLERFOLDER=$(echo "${OMADATARGZ}" | sed 's/\.tar\.gz//') && echo "Omada install folder set: ${MYINSTALLERFOLDER}"
+    MYOMADAVERSION=$(echo "${OMADATARGZ}" | awk '{split($0,a,"_"); print a[4]}') && echo "Omada version: ${MYOMADAVERSION}"
+
+    # Download and install Omada
+    # Check if omada installation folder exists, as if it does, no installation is
+    # required
+    if [[ -d ${OmadaSdnDestination} ]]; then
+        echo "Omada destination folder exists, skipping installation"
+    else
+        if [[ -f ./${OMADATARGZ} ]]; then 
+            # If omada installer is found, extract it
+            echo "Omada installer file ${OMADATARGZ} found, skip download"
+            tar -xzf "${OMADATARGZ}"
+        else 
+            # If omada installer is not found, download and extract it
+            wget -c ${OmadaSdnUrl} -O - | tar -xz 
+        fi
+        # Make scripts and binaries executable    
+        chmod +x ${MYINSTALLERFOLDER}/*.sh
+        chmod +x ${MYINSTALLERFOLDER}/bin/*
+        # Install omada controller, by default it is enabled on boot
+        cd ${MYINSTALLERFOLDER}
+        ./install.sh
+    fi
+} && echo "Loaded function ... InstallOmadaSDNFromTarGz"
+
+firstBootAwsAmazonLinux2 () {
+    # Set vars
+    OMADATARGZ=$(echo "${OmadaSdnUrl}" | awk '{split($0,a,"/"); print a[9]}') && echo "Omada installer filename set: ${OMADATARGZ}"
+    MYINSTALLERFOLDER=$(echo "${OMADATARGZ}" | sed 's/\.tar\.gz//') && echo "Omada install folder set: ${MYINSTALLERFOLDER}"
+    MYOMADAVERSION=$(echo "${OMADATARGZ}" | awk '{split($0,a,"_"); print a[4]}') && echo "Omada version: ${MYOMADAVERSION}"
+    OMADADEST="/opt/tplink/EAPController"
+
+    # Add mongodb repo
+    cat <<"EOF" | tee /etc/yum.repos.d/mongodb-org-4.4.repo
+[mongodb-org-4.4]
+name=MongoDB 4.4 Repository
+baseurl=https://repo.mongodb.org/yum/amazon/2/mongodb-org/4.4/x86_64
+gpgcheck=1
+enabled=1
+gpgkey=https://www.mongodb.org/static/pgp/server-4.4.asc
+EOF
+
+    # repository update
+    yum update -y
+    yum install -y java-1.8.0-openjdk-headless jsvc mongodb-org
+    # Install Omada SDN if not installed.
+    InstallOmadaSDNFromTarGz
+} && echo "Loaded function ... firstBootAwsAmazonLinux2"
 
 echo "Info: Omada Helper Functions Loaded"
