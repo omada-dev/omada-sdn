@@ -27,8 +27,24 @@ grade: devel
 confinement: strict
 icon: src/omada.png
 parts:
-  mongodb:
+  mongodb-org-shell:
     source: https://repo.mongodb.org/apt/ubuntu/dists/bionic/mongodb-org/4.4/multiverse/binary-${SNAPCRAFT_TARGET_ARCH}/mongodb-org-shell_4.4.15_${SNAPCRAFT_TARGET_ARCH}.deb
+    source-type: deb
+    plugin: dump
+  mongodb-org-server:
+    source: https://repo.mongodb.org/apt/ubuntu/dists/focal/mongodb-org/4.4/multiverse/binary-${SNAPCRAFT_TARGET_ARCH}/mongodb-org-server_4.4.15_${SNAPCRAFT_TARGET_ARCH}.deb
+    source-type: deb
+    plugin: dump
+  mongodb-org-mongos:
+    source: https://repo.mongodb.org/apt/ubuntu/dists/focal/mongodb-org/4.4/multiverse/binary-${SNAPCRAFT_TARGET_ARCH}/mongodb-org-mongos_4.4.15_${SNAPCRAFT_TARGET_ARCH}.deb
+    source-type: deb
+    plugin: dump
+  mongodb-org-tools:
+    source: https://repo.mongodb.org/apt/ubuntu/dists/focal/mongodb-org/4.4/multiverse/binary-${SNAPCRAFT_TARGET_ARCH}/mongodb-org-tools_4.4.15_${SNAPCRAFT_TARGET_ARCH}.deb
+    source-type: deb
+    plugin: dump
+  mongodb-org:
+    source: https://repo.mongodb.org/apt/ubuntu/dists/focal/mongodb-org/4.4/multiverse/binary-${SNAPCRAFT_TARGET_ARCH}/mongodb-org_4.4.15_${SNAPCRAFT_TARGET_ARCH}.deb
     source-type: deb
     plugin: dump
   omada:
