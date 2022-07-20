@@ -39,3 +39,4 @@ parts:
       - curl
       - jsvc
       - openjdk-8-jre-headless
+      - libcurl4
