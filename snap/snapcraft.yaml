@@ -11,7 +11,7 @@ description: |
   a single interface. Seamless wireless and wired connections
   are provided, ideal for use in hospitality, education, retail,
   offices, and more.
-   
+  
   This package installs following packages:
   
     openjdk-8-jre-headless, jsvc, mongodb-server
@@ -20,7 +20,7 @@ description: |
   
   - Business Community: https://community.tp-link.com/business/
   - TP-Link Support:    https://www.tp-link.com/support/
-
+  
   Omada Logo source:
   https://static.tp-link.com/res/images/static/omada/images/logo.png
 grade: devel
