@@ -26,16 +26,38 @@ description: |
 grade: devel
 confinement: strict
 icon: src/omada.png
+apps:
+  daemon:
+    command: tpeap
+    plugs: [network, network-bind, network-status, home, removable-media]
+    desktop: tpeap.desktop
+    environment:
+      XDG_DATA_DIRS: $SNAP_USER_DATA:$SNAP/usr/share:$XDG_DATA_DIRS
 parts:
   omada:
-      OmadaSdnUrl=https://static.tp-link.com/upload/software/2022/202205/20220507/Omada_SDN_Controller_v${SNAPCRAFT_PROJECT_VERSION}_Linux_x64.tar.gz
+    source: https://static.tp-link.com/upload/software/2022/202205/20220507/Omada_SDN_Controller_v${SNAPCRAFT_PROJECT_VERSION}_Linux_x64.tar.gz
+    source-type: tar
+    plugin: nil
+    override-build: |
       echo "+++++++++++++++++++++++++++++++++++++++++++++++"
       echo "Download Omada SDN Controller Install Package
       echo "+++++++++++++++++++++++++++++++++++++++++++++++"
-      wget ${OmadaSdnUrl}
-      tar -xzf Omada_SDN_Controller_v${SNAPCRAFT_PROJECT_VERSION}_Linux_x64.tar.gz
+      chmod +x ${SNAPCRAFT_PART_BUILD}/*.sh
+      chmod +x ${SNAPCRAFT_PART_BUILD}/bin/*
+      cd ${SNAPCRAFT_PART_BUILD}
+      ./install.sh
     build-packages:
       - curl
       - wget
       - openjdk-8-jre-headless
       - mongodb-org
+    after:
+      - patches
+  patches:
+    source: snap/local/patches
+    plugin: dump
+    prime:
+      - -*
+  desktop:
+    source: snap/local/desktop
+    plugin: dump
