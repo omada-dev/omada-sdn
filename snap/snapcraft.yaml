@@ -28,7 +28,7 @@ confinement: strict
 icon: src/omada.png
 parts:
   mongodb:
-    source: https://repo.mongodb.org/apt/ubuntu/dists/bionic/mongodb-org/4.4/multiverse/binary-${SNAPCRAFT_ARCH_TRIPLET}/mongodb-org-shell_4.4.15_${SNAPCRAFT_ARCH_TRIPLET}.deb
+    source: https://repo.mongodb.org/apt/ubuntu/dists/bionic/mongodb-org/4.4/multiverse/binary-${SNAPCRAFT_TARGET_ARCH}/mongodb-org-shell_4.4.15_${SNAPCRAFT_TARGET_ARCH}.deb
     source-type: deb
     plugin: dump
   omada:
