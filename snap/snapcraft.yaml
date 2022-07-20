@@ -1,6 +1,6 @@
 # Copyright (c) 2022 Omada Community Developers
 name: omada
-base: core18
+base: core20
 version: 5.3.1
 summary: Software Defined Networking (SDN) with Cloud Access
 description: |
@@ -26,27 +26,16 @@ description: |
 grade: devel
 confinement: strict
 icon: src/omada.png
-apps:
-  daemon:
-    command: tpeap
-    plugs: [network, network-bind, network-status, home, removable-media]
-    desktop: tpeap.desktop
-    environment:
-      XDG_DATA_DIRS: $SNAP_USER_DATA:$SNAP/usr/share:$XDG_DATA_DIRS
 parts:
+  mongodb:
+    source: https://repo.mongodb.org/apt/ubuntu/dists/bionic/mongodb-org/4.4/multiverse/binary-${SNAPCRAFT_ARCH_TRIPLET}/mongodb-org-shell_4.4.15_${SNAPCRAFT_ARCH_TRIPLET}.deb
+    source-type: deb
+    plugin: dump
   omada:
-    source: https://static.tp-link.com/upload/software/2022/202205/20220507/Omada_SDN_Controller_v${SNAPCRAFT_PROJECT_VERSION}_Linux_x64.tar.gz
-    plugin: nil
-    override-build: |
-      echo "+++++++++++++++++++++++++++++++++++++++++++++++"
-      echo "Download Omada SDN Controller Install Package
-      echo "+++++++++++++++++++++++++++++++++++++++++++++++"
-      chmod +x ${SNAPCRAFT_PART_BUILD}/*.sh
-      chmod +x ${SNAPCRAFT_PART_BUILD}/bin/*
-      cd ${SNAPCRAFT_PART_BUILD}
-      ./install.sh
-    build-packages:
+    source: https://static.tp-link.com/upload/software/2022/202205/20220507/Omada_SDN_Controller_v${SNAPCRAFT_PROJECT_VERSION}_Linux_x64.deb
+    source-type: deb
+    plugin: dump
+    stage-packages:
       - curl
-      - wget
+      - jsvc
       - openjdk-8-jre-headless
-      - mongodb-org
