@@ -1,0 +1,41 @@
+# Copyright (c) 2022 Omada Community Developers
+name: omada
+base: core18
+version: 5.3.1
+summary: Software Defined Networking (SDN) with Cloud Access
+description: |
+  Omada’s Software Defined Networking (SDN) platform integrates
+  network devices, including access points, switches and 
+  gateways, providing 100% centralized cloud management.
+  Omada creates a highly scalable network—all controlled from
+  a single interface. Seamless wireless and wired connections
+  are provided, ideal for use in hospitality, education, retail,
+  offices, and more.
+   
+  This package installs following packages:
+  
+    openjdk-8-jre-headless, jsvc, mongodb-server
+  
+  Documentation and wiki:
+  
+  - Business Community: https://community.tp-link.com/business/
+  - TP-Link Support:    https://www.tp-link.com/support/
+
+  Omada Logo source:
+  https://static.tp-link.com/res/images/static/omada/images/logo.png
+grade: devel
+confinement: strict
+icon: src/omada.png
+parts:
+  omada:
+      OmadaSdnUrl=https://static.tp-link.com/upload/software/2022/202205/20220507/Omada_SDN_Controller_v${SNAPCRAFT_PROJECT_VERSION}_Linux_x64.tar.gz
+      echo "+++++++++++++++++++++++++++++++++++++++++++++++"
+      echo "Download Omada SDN Controller Install Package
+      echo "+++++++++++++++++++++++++++++++++++++++++++++++"
+      wget ${OmadaSdnUrl}
+      tar -xzf Omada_SDN_Controller_v${SNAPCRAFT_PROJECT_VERSION}_Linux_x64.tar.gz
+    build-packages:
+      - curl
+      - wget
+      - openjdk-8-jre-headless
+      - mongodb-org
