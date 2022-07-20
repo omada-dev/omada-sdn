@@ -1,5 +1,5 @@
-.tar.xz
-.tar.gz
-.zip
-.deb
-.snap
+*.tar.xz
+*.tar.gz
+*.zip
+*.deb
+*.snap
