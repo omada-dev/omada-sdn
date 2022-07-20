@@ -36,7 +36,6 @@ apps:
 parts:
   omada:
     source: https://static.tp-link.com/upload/software/2022/202205/20220507/Omada_SDN_Controller_v${SNAPCRAFT_PROJECT_VERSION}_Linux_x64.tar.gz
-    source-type: tar
     plugin: nil
     override-build: |
       echo "+++++++++++++++++++++++++++++++++++++++++++++++"
