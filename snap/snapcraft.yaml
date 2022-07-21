@@ -12,10 +12,6 @@ description: |
   are provided, ideal for use in hospitality, education, retail,
   offices, and more.
   
-  This package installs following packages:
-  
-    openjdk-8-jre-headless, jsvc, mongodb-server
-  
   Documentation and wiki:
   
   - Business Community: https://community.tp-link.com/business/
@@ -26,33 +22,35 @@ description: |
 grade: devel
 confinement: strict
 icon: src/omada.png
+apps:
+  tpeap:
+    command: opt/tplink/EAPController/bin/control.sh
+    plugs: [network, network-bind, network-status, home, removable-media, root]
+    environment:
+      JAVA_HOME: $SNAP/usr/lib/jvm/java-1.8.0-openjdk-amd64
+      PATH: $JAVA_HOME/bin:$JAVA_HOME/jre/bin:$SNAP/usr/bin:$SNAP/opt/tplink/EAPController/bin:$PATH
 parts:
-  mongodb-org-shell:
-    source: https://repo.mongodb.org/apt/ubuntu/dists/bionic/mongodb-org/4.4/multiverse/binary-${SNAPCRAFT_TARGET_ARCH}/mongodb-org-shell_4.4.15_${SNAPCRAFT_TARGET_ARCH}.deb
-    source-type: deb
-    plugin: dump
-  mongodb-org-server:
-    source: https://repo.mongodb.org/apt/ubuntu/dists/focal/mongodb-org/4.4/multiverse/binary-${SNAPCRAFT_TARGET_ARCH}/mongodb-org-server_4.4.15_${SNAPCRAFT_TARGET_ARCH}.deb
-    source-type: deb
-    plugin: dump
-  mongodb-org-mongos:
-    source: https://repo.mongodb.org/apt/ubuntu/dists/focal/mongodb-org/4.4/multiverse/binary-${SNAPCRAFT_TARGET_ARCH}/mongodb-org-mongos_4.4.15_${SNAPCRAFT_TARGET_ARCH}.deb
-    source-type: deb
-    plugin: dump
-  mongodb-org-tools:
-    source: https://repo.mongodb.org/apt/ubuntu/dists/focal/mongodb-org/4.4/multiverse/binary-${SNAPCRAFT_TARGET_ARCH}/mongodb-org-tools_4.4.15_${SNAPCRAFT_TARGET_ARCH}.deb
-    source-type: deb
-    plugin: dump
-  mongodb-org:
-    source: https://repo.mongodb.org/apt/ubuntu/dists/focal/mongodb-org/4.4/multiverse/binary-${SNAPCRAFT_TARGET_ARCH}/mongodb-org_4.4.15_${SNAPCRAFT_TARGET_ARCH}.deb
-    source-type: deb
-    plugin: dump
-  omada:
+  add-ppa:
+    plugin: nil
+    override-pull: |
+      echo "deb [ arch=amd64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/4.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb.list
+      apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 656408E390CFB1F5
+      apt update
+      apt upgrade -yy
+    build-packages:
+      - software-properties-common
+      - dirmngr
+      - gnupg
+      - apt-transport-https
+      - ca-certificates
+  tpeap:
+    after: [add-ppa]
     source: https://static.tp-link.com/upload/software/2022/202205/20220507/Omada_SDN_Controller_v${SNAPCRAFT_PROJECT_VERSION}_Linux_x64.deb
     source-type: deb
     plugin: dump
     stage-packages:
-      - curl
+      - adduser
       - jsvc
+      - curl
       - openjdk-8-jre-headless
-      - libcurl4
+      - mongodb-org
