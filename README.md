@@ -28,7 +28,7 @@ Scripts which can be used together with different providers.
 
 ### Amazon (AWS)
 
-[Script](bin/aws-userdata-amazon-linux-2.sh) example for use as user data script for Omada SDN Controller on AWS with Amazon Linux or simply to install Omada SDN controller for the first time. For more, read [User Guide for Linux Instances](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instancedata-add-user-data.html) and [Run commands on your Linux instance at launch](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html).
+[Script](bin/aws-userdata-amazon-linux.sh) example for use as user data script for Omada SDN Controller on AWS with Amazon Linux or simply to install Omada SDN controller for the first time. For more, read [User Guide for Linux Instances](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instancedata-add-user-data.html) and [Run commands on your Linux instance at launch](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html).
 
 ## Omada Helper Functions Script
 
