@@ -4,9 +4,9 @@
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 # Omada Controller installer sources: https://community.tp-link.com/en/business/forum/topic/548752
-# Linux:            https://static.tp-link.com/upload/software/2022/202205/20220507/Omada_SDN_Controller_v5.3.1_Linux_x64.tar.gz
+# Linux:            https://static.tp-link.com/upload/software/2022/202207/20220729/Omada_SDN_Controller_v5.4.6_Linux_x64.tar.gz
 
-OMADAURL="https://static.tp-link.com/upload/software/2022/202205/20220507/Omada_SDN_Controller_v5.3.1_Linux_x64.tar.gz" && echo "URL set: ${OMADAURL}"
+OMADAURL="https://static.tp-link.com/upload/software/2022/202207/20220729/Omada_SDN_Controller_v5.4.6_Linux_x64.tar.gz" && echo "URL set: ${OMADAURL}"
 
 # Set vars
 OMADATARGZ=$(echo "${OMADAURL}" | awk '{split($0,a,"/"); print a[9]}') && echo "Omada installer filename set: ${OMADATARGZ}"
