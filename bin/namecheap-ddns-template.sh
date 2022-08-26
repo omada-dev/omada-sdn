@@ -5,6 +5,6 @@
 domain=YOURDOMAIN && \  # Example: yourdomain.com
 host=YOURSUBDOMAIN && \    # this is your subdomain, Example: omada
 password=YOURPASSWORD && \ # this is namecheap ddns password, Example: 7f33f5ad070f257e52d7bcdab12effe4 (check https://ap.www.namecheap.com/Domains/DomainControlPanel/yourdomain.com/advancedns)
-ip=$(dig +short myip.opendns.com @one.one.one.one) && \
+ip=$(dig +short myip.opendns.com @resolver1.opendns.com) && \
 logfile="/var/run/ddns_S{host}.${domain}_namecheap_ipv4.err" && \
-/usr/bin/curl -RsS --stderr ${logfile} --noproxy '*' "http://dynamicdns.park-your-domain.com/update?host=S{host}&domain=S{domain}&password=S{password}&ip=${ip}"
+/usr/bin/curl -RsS --stderr ${logfile} --noproxy '*' "http://dynamicdns.park-your-domain.com/update?host=${host}&domain=${domain}&password=${password}&ip=${ip}"
