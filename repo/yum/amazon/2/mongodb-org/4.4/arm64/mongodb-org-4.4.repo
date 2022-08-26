@@ -1,0 +1,6 @@
+[mongodb-org-4.4]
+name=MongoDB 4.4 Repository
+baseurl=https://repo.mongodb.org/yum/amazon/2/mongodb-org/4.4/arm64
+gpgcheck=1
+enabled=1
+gpgkey=https://www.mongodb.org/static/pgp/server-4.4.asc
